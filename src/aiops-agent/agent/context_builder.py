@@ -77,12 +77,18 @@ def build_context() -> SystemContext:
     }
 
     # === Phát hiện anomaly ===
+    # Rule 1: Latency vượt ngưỡng
     if ctx.latency_p99 > LATENCY_THRESHOLD:
         ctx.has_anomaly = True
         if ctx.request_rate > 100:
             ctx.anomaly_type = "ddos_suspected"
         else:
             ctx.anomaly_type = "high_load"
+    # Rule 2: Request rate bất thường cao (detect DDoS TRƯỚC KHI latency tăng)
+    elif ctx.request_rate > 100:
+        ctx.has_anomaly = True
+        ctx.anomaly_type = "ddos_suspected"
+    # Rule 3: Error rate cao
     elif ctx.error_rate > 0.01:
         ctx.has_anomaly = True
         ctx.anomaly_type = "high_error_rate"
