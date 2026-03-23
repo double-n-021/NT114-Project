@@ -1,0 +1,51 @@
+# INTELLIGENCE PLANE — MLflow Tracking Server
+# Architecture: "MLflow Tracking — Decision history — Log: action, reason, outcome
+#                Drift detection alerts"
+#
+# Stores AI Agent decision history for:
+#   - Audit trail: what action, why, what outcome
+#   - Drift detection: is Agent accuracy degrading over time?
+#   - Comparison: Cloud LLM vs Local LLM decision quality
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlflow
+  namespace: aiops
+  labels:
+    app: mlflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlflow
+  template:
+    metadata:
+      labels:
+        app: mlflow
+    spec:
+      containers:
+      - name: mlflow
+        image: ghcr.io/mlflow/mlflow:v2.17.0
+        ports:
+        - containerPort: 5000
+        command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000"]
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "300m"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mlflow-service
+  namespace: aiops
+spec:
+  selector:
+    app: mlflow
+  ports:
+  - port: 5000
+    targetPort: 5000
+  type: ClusterIP

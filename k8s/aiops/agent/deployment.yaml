@@ -1,0 +1,55 @@
+# INTELLIGENCE PLANE — AI Agent Deployment
+# Architecture: "AI Agent (Deployment) — namespace: aiops"
+#
+# Runs the ReAct Agent loop that observes Prometheus metrics,
+# reasons about anomalies, and executes remediation actions
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aiops-agent
+  namespace: aiops
+  labels:
+    app: aiops-agent
+    tier: intelligence-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aiops-agent
+  template:
+    metadata:
+      labels:
+        app: aiops-agent
+    spec:
+      serviceAccountName: aiops-agent-sa
+      containers:
+      - name: agent
+        image: aiops-agent:v1
+        imagePullPolicy: Never    # minikube; change to Always for AKS
+        env:
+        - name: PROMETHEUS_URL
+          value: "http://monitoring-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
+        - name: LLM_PROVIDER
+          value: "ollama"         # or "azure-openai"
+        - name: OLLAMA_HOST
+          value: "http://ollama-service.aiops.svc.cluster.local:11434"
+        - name: CHECK_INTERVAL
+          value: "30"
+        # Azure OpenAI settings (when using cloud LLM):
+        # - name: AZURE_OPENAI_ENDPOINT
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: azure-openai-secret
+        #       key: endpoint
+        # - name: AZURE_OPENAI_API_KEY
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: azure-openai-secret
+        #       key: api-key
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

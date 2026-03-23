@@ -1,0 +1,25 @@
+# DATA PLANE — Nginx Ingress
+# Architecture: "Nginx Ingress Controller — L7 HTTP/HTTPS only — External LoadBalancer IP"
+#
+# Routes HTTP traffic to target-app
+# Noise and DDoS traffic enters through this path
+# TODO: Configure when Nginx Ingress Controller is installed
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: target-app-ingress
+  namespace: medical-data
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: target-app-service
+            port:
+              number: 80

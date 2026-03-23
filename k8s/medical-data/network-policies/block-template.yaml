@@ -1,0 +1,30 @@
+# DATA PLANE — Agent-managed Block Policy (TEMPLATE)
+# This file is a REFERENCE TEMPLATE
+# The actual policy is generated at runtime by:
+#   src/aiops-agent/agent/tools/networkpolicy_tool.py
+# using the Jinja template at:
+#   src/aiops-agent/templates/networkpolicy_template.yaml
+#
+# Architecture: "NetworkPolicy — Deny from noise/DDoS CIDRs — Allow only critical sources"
+#
+# Example of what the Agent generates:
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: agent-block-suspicious
+  namespace: medical-data
+  labels:
+    managed-by: aiops-agent
+spec:
+  podSelector:
+    matchLabels:
+      app: target-app
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - "10.0.0.5/32"     # example: blocked by Agent
+        - "10.0.0.8/32"     # example: blocked by Agent

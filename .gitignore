@@ -1,0 +1,87 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+coverage/
+htmlcov/
+.venv/
+venv/
+env/
+ENV/
+.env
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+.vs/
+*.code-workspace
+*.suo
+*.user
+*.userprefs
+*.rsuser
+*.sln.docstates
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+.terraform.lock.hcl
+
+# Kubernetes
+kubeconfig
+*.pem
+
+# Secrets — NEVER commit these
+*.key
+pass.txt
+credentials.json
+*_secret*
+*.p12
+*.pfx
+
+# Docker
+.docker/
+
+# Node / frontend (if any)
+node_modules/
+
+# Build results (common)
+bin/
+obj/
+Debug/
+Release/
+
+# MLflow & Data
+mlruns/
+mlartifacts/
+datasets/
+models/
+*.ckpt
+*.h5
+*.pb
+
+# Build artifacts
+dist/
+build/
+*.egg
+
+# AI tooling
+.claude/
+.cursor/
+
+# Temporary helper files / drafts (Specific to this project)
+pdf_output.txt
+pptx_text.txt
+draft/
+nul

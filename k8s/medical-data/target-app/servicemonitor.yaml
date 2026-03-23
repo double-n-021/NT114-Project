@@ -1,0 +1,27 @@
+# DATA PLANE — ServiceMonitor CRD
+# Architecture: "ServiceMonitor CRD — Prometheus auto-discovery — Scrape target-app /metrics"
+#
+# This tells Prometheus (in monitoring namespace) to automatically scrape
+# the /metrics endpoint of target-app every 5 seconds.
+#
+# CRITICAL: The label "release: monitoring" must match the Prometheus Operator's
+# serviceMonitorSelector. This is set by default in kube-prometheus-stack Helm chart.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: target-app-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring    # must match Prometheus serviceMonitorSelector
+    app: target-app
+spec:
+  namespaceSelector:
+    matchNames:
+    - medical-data
+  selector:
+    matchLabels:
+      app: target-app
+  endpoints:
+  - port: http             # must match Service port name
+    interval: 5s
+    path: /metrics

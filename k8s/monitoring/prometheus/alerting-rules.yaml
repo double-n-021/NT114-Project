@@ -1,0 +1,52 @@
+# OBSERVABILITY — Custom Alerting Rules
+# These alerts trigger Alertmanager notifications
+# Architecture: "Alertmanager — Alert routing — Dedup + Grouping — Notify: Slack/Email"
+#
+# Alerts are based on QoS targets from project specification:
+#   - Latency p99 < 200ms
+#   - Error rate < 1%
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: qos-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+  - name: qos-violations
+    rules:
+    - alert: HighLatencyP99
+      expr: |
+        histogram_quantile(0.99,
+          sum(rate(http_request_duration_seconds_bucket{namespace="medical-data"}[1m])) by (le)
+        ) > 0.2
+      for: 30s
+      labels:
+        severity: critical
+        team: aiops
+      annotations:
+        summary: "Latency p99 exceeds 200ms QoS threshold"
+        description: "Latency p99 is {{ $value | humanizeDuration }} (threshold: 200ms)"
+
+    - alert: HighErrorRate
+      expr: |
+        sum(rate(http_request_total{namespace="medical-data",status_code=~"5.."}[1m]))
+        /
+        sum(rate(http_request_total{namespace="medical-data"}[1m]))
+        > 0.01
+      for: 1m
+      labels:
+        severity: warning
+        team: aiops
+      annotations:
+        summary: "Error rate exceeds 1% threshold"
+        description: "Error rate is {{ $value | humanizePercentage }}"
+
+    - alert: PodCrashLooping
+      expr: increase(kube_pod_container_status_restarts_total{namespace="medical-data"}[5m]) > 3
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Pod {{ $labels.pod }} is crash-looping"

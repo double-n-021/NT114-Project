@@ -1,0 +1,13 @@
+# Helm values override for ingress-nginx
+# Install command:
+#   helm install ingress-nginx ingress-nginx/ingress-nginx \
+#     -n medical-data -f helm-values/ingress-nginx-values.yaml
+#
+# Architecture: "Nginx Ingress Controller — L7 HTTP/HTTPS only"
+controller:
+  service:
+    type: NodePort              # minikube; change to LoadBalancer for AKS
+  metrics:
+    enabled: true               # expose /metrics for Prometheus scraping
+    serviceMonitor:
+      enabled: true

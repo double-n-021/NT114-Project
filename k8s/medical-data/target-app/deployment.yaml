@@ -1,0 +1,53 @@
+# DATA PLANE — target-app Deployment
+# Architecture: "target-app (x N replicas) — FastAPI :8000"
+#
+# Key design decisions:
+#   - resources.requests: used by KEDA/HPA to calculate utilization %
+#   - livenessProbe: K8s restarts container if /health-check fails
+#   - readinessProbe: K8s stops routing traffic if /health-check fails
+#   - imagePullPolicy: Never (minikube) → Always (AKS with ACR)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: target-app
+  namespace: medical-data
+  labels:
+    app: target-app
+    tier: data-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: target-app
+  template:
+    metadata:
+      labels:
+        app: target-app
+        tier: data-plane
+    spec:
+      containers:
+      - name: target-app
+        image: target-app:v2
+        imagePullPolicy: Never    # minikube local image; change to Always for AKS
+        ports:
+        - name: http
+          containerPort: 8000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /health-check
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health-check
+            port: http
+          initialDelaySeconds: 3
+          periodSeconds: 5

@@ -1,0 +1,40 @@
+# Kubernetes Namespace Layout
+# Maps to Section 3 of architecture_mermaid.md
+#
+# 4 namespaces isolating concerns:
+#   medical-data  → Data Plane (target-app, MQTT, Ingress, NetworkPolicy, ScaledObject)
+#   aiops         → Intelligence Plane (AI Agent, MLflow, Ollama)
+#   monitoring    → Observability (Prometheus, Grafana, Alertmanager, Loki, Promtail)
+#   keda-system   → KEDA Operator (autoscaler)
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: medical-data
+  labels:
+    purpose: data-plane
+    project: aiops-qos
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aiops
+  labels:
+    purpose: intelligence-plane
+    project: aiops-qos
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    purpose: observability
+    project: aiops-qos
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keda-system
+  labels:
+    purpose: autoscaling
+    project: aiops-qos

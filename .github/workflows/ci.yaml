@@ -1,0 +1,38 @@
+# DevSecOps CI Pipeline
+# Architecture mapping:
+#   "Git Push → Docker Build + Unit Test → SonarCloud SAST → Trivy Image Scan
+#    → Push to ACR → Deploy to AKS → Smoke Test"
+#
+# This pipeline runs on every push/PR to main branch
+# TODO: Implement full pipeline — see roadmap Bước 9
+
+name: CI - Build, Test, Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        pip install -r src/target-app/requirements.txt
+        pip install pytest httpx
+
+    - name: Run target-app tests
+      run: pytest src/target-app/tests/ -v
+
+  # TODO: Add SonarCloud SAST scan job
+  # TODO: Add Docker build + Trivy scan job
+  # TODO: Add deploy job

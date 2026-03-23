@@ -1,0 +1,19 @@
+# Helm values override for kube-prometheus-stack
+# Install command:
+#   helm install monitoring prometheus-community/kube-prometheus-stack \
+#     -n monitoring -f helm-values/prometheus-stack-values.yaml
+#
+# This installs: Prometheus + Grafana + Alertmanager + node-exporter + kube-state-metrics
+prometheus:
+  prometheusSpec:
+    scrapeInterval: 5s          # match architecture: "Scrape: 5s interval"
+    retention: 15d              # match architecture: "Retention: 15d"
+    serviceMonitorSelectorNilUsesHelmValues: false   # discover ALL ServiceMonitors
+
+grafana:
+  adminPassword: admin          # change for production
+  service:
+    type: NodePort              # minikube; change to ClusterIP + Ingress for AKS
+
+alertmanager:
+  enabled: true

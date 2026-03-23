@@ -1,0 +1,20 @@
+# DATA PLANE — target-app Service
+# Exposes target-app within cluster and externally (NodePort for minikube)
+#
+# Note: port name "http" must match ServiceMonitor endpoint port
+apiVersion: v1
+kind: Service
+metadata:
+  name: target-app-service
+  namespace: medical-data
+  labels:
+    app: target-app
+spec:
+  selector:
+    app: target-app
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: NodePort    # minikube; change to ClusterIP when behind Ingress on AKS

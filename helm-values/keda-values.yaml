@@ -1,0 +1,11 @@
+# Helm values override for KEDA
+# Install command:
+#   helm install keda kedacore/keda \
+#     --namespace keda-system --create-namespace \
+#     -f helm-values/keda-values.yaml
+#
+# Architecture: "KEDA Operator — keda-system namespace
+#                Watches ScaledObject CRDs — Drives HPA scaling"
+
+# Default values are sufficient for minikube
+# Add resource limits for AKS production

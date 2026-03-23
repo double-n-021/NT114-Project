@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>[NT114] ĐỀ CƯƠNG ĐỒ ÁN CHUYÊN NGÀNH - DEVSECOPS AGENTIC AIOPS</title>
+  <meta name="description" content="Đề cương đồ án chuyên ngành NT114: Thiết kế và Triển khai Nền tảng DevSecOps tích hợp MLOps để Vận hành Hệ thống Agentic AIOps, Đảm bảo Chất lượng Dịch vụ (QoS) cho Dữ liệu Sinh hiệu Thời gian thực.">
+  <meta name="author" content="Nguyễn Minh Quyền, Bùi Đặng Nhật Nguyên">
+  <meta property="og:title" content="[NT114] Đề Cương Đồ Án - DevSecOps Agentic AIOps">
+  <meta property="og:description" content="Thiết kế và Triển khai Nền tảng DevSecOps tích hợp MLOps để Vận hành Hệ thống Agentic AIOps">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="css/style.css?v=8">
+</head>
+
+<body>
+
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">NT114 &mdash; ĐỒ ÁN CHUYÊN NGÀNH &mdash; HK2 2025-2026</div>
+      <h1 class="hero-title">ĐỀ CƯƠNG ĐỒ ÁN<br>CHUYÊN NGÀNH</h1>
+      <p class="subtitle">
+        Thiết kế và Triển khai Nền tảng DevSecOps tích hợp MLOps để Vận hành Hệ thống Agentic AIOps,
+        Đảm bảo Chất lượng Dịch vụ (QoS) cho Dữ liệu Sinh hiệu Thời gian thực
+      </p>
+      <div class="hero-card">
+        <div class="hero-card-row">
+          <div class="hero-card-item">
+            <span class="hero-card-label">GVHD</span>
+            <strong class="hero-card-value">ThS. Lê Anh Tuấn</strong>
+          </div>
+          <div class="hero-card-sep"></div>
+          <div class="hero-card-item">
+            <span class="hero-card-label">Thời gian</span>
+            <strong class="hero-card-value">01/02/2026 &ndash; 30/05/2026</strong>
+          </div>
+        </div>
+        <div class="hero-card-row">
+          <div class="hero-card-item">
+            <span class="hero-card-label">Khoa</span>
+            <strong class="hero-card-value">Mạng máy tính &amp; Truyền thông</strong>
+          </div>
+          <div class="hero-card-sep"></div>
+          <div class="hero-card-item">
+            <span class="hero-card-label">Trường</span>
+            <strong class="hero-card-value">ĐH Công nghệ Thông tin, ĐHQG-HCM</strong>
+          </div>
+        </div>
+        <div class="hero-card-footer">
+          <span class="hero-card-label">Sinh viên thực hiện</span>
+          <div class="hero-students-grid">
+            <div class="hero-student">
+              <strong class="hero-student-name">Nguyễn Minh Quyền</strong>
+              <span class="hero-student-id">MSSV: 23521325</span>
+            </div>
+            <div class="hero-student">
+              <strong class="hero-student-name">Bùi Đặng Nhật Nguyên</strong>
+              <span class="hero-student-id">MSSV: 23521037</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY NAV -->
+  <nav class="nav-bar" aria-label="Mục lục">
+    <div class="nav-inner">
+      <a href="#s1">Giới thiệu</a>
+      <a href="#s2">Bối cảnh</a>
+      <a href="#s3">Mục tiêu</a>
+      <a href="#s4">Kiến trúc</a>
+      <a href="#s5">Phương pháp</a>
+      <a href="#s6">Công nghệ</a>
+      <a href="#s7">Kế hoạch</a>
+      <a href="#s8">Kết quả kỳ vọng</a>
+      <a href="#s9">Hạn chế</a>
+      <a href="#s10">Tài liệu</a>
+    </div>
+  </nav>
+
+  <!-- PHẦN I: GIỚI THIỆU ĐỀ TÀI -->
+  <section id="s1" class="section section-light">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">I</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần I</span>
+          <h2>Giới thiệu Đề tài</h2>
+        </div>
+      </div>
+
+      <p>
+        Đề tài tập trung vào bài toán <strong>đảm bảo Chất lượng Dịch vụ mạng (QoS)</strong> cho dữ liệu
+        sinh hiệu trong mạng Internet vạn vật Y tế (IoMT). Cụ thể, hệ thống cần duy trì
+        <strong>độ trễ truyền tải &lt; 200ms</strong> cho các gói tin sinh hiệu (nhịp tim, SpO2, huyết áp)
+        ngay cả trong điều kiện mạng biến động mạnh &mdash; bao gồm tình trạng cạnh tranh băng thông,
+        các cuộc tấn công từ chối dịch vụ (DDoS) hay sự gia tăng đột biến số lượng kết nối thiết bị [5].
+      </p>
+
+      <p>
+        Các phương pháp giám sát truyền thống dựa trên ngưỡng tĩnh bộc lộ nhiều hạn chế:
+        phản ứng chậm, thiếu linh hoạt và phụ thuộc vào con người. Điều này đặt ra nhu cầu cấp thiết
+        về một hệ thống vận hành thông minh (AIOps) có khả năng tự động điều phối tài nguyên
+        theo thời gian thực [4].
+      </p>
+
+      <p>
+        Giải pháp đề xuất là xây dựng một hệ thống <strong>Agentic AIOps</strong> &mdash; AI Agent tự chủ có
+        khả năng phân tích ngữ cảnh thời gian thực, phân biệt giữa tải cao hợp lệ và tấn công DDoS,
+        từ đó chủ động điều phối tài nguyên thông qua cơ chế Autoscaling và Traffic Filtering.
+        Hệ thống được vận hành trên nền tảng <strong>DevSecOps an toàn</strong> với quy trình
+        <strong>MLOps chuẩn hóa</strong>.
+      </p>
+
+      <div class="highlight-box highlight-info">
+        <p><strong>Tiêu đề tiếng Anh:</strong> Design and Implementation of a DevSecOps Platform Integrated
+        with MLOps for Operating an Agentic AIOps System to Ensure Quality of Service (QoS)
+        for Real-Time Physiological Signal Data.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN II: BỐI CẢNH & VẤN ĐỀ NGHIÊN CỨU -->
+  <section id="s2" class="section section-alt">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">II</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần II</span>
+          <h2>Bối cảnh &amp; Vấn đề Nghiên cứu</h2>
+        </div>
+      </div>
+
+      <h3>1. Thách thức trong hạ tầng mạng y tế</h3>
+
+      <p>
+        Trong mạng IoMT, dữ liệu sinh hiệu yêu cầu tính thời gian thực nghiêm ngặt với độ trễ
+        lý tưởng dưới 200ms. Bất kỳ sự chậm trễ nào đều có thể dẫn đến bỏ lỡ "thời điểm vàng"
+        cấp cứu bệnh nhân. Tuy nhiên, hạ tầng mạng y tế hiện đại đối mặt với nhiều thách thức [5]:
+      </p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon card-icon-blue">BW</div>
+          <h4>Cạnh tranh băng thông</h4>
+          <p>Lưu lượng ưu tiên cao (sinh hiệu) phải chia sẻ băng thông với dữ liệu nhiễu:
+          cập nhật hệ thống, video giám sát, báo cáo định kỳ.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-red">DD</div>
+          <h4>Tấn công từ chối dịch vụ</h4>
+          <p>Các cuộc tấn công DDoS có thể làm nghẽn hoàn toàn đường truyền,
+          khiến dữ liệu sinh hiệu không thể đến được trung tâm xử lý.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-orange">IoT</div>
+          <h4>Bùng nổ kết nối thiết bị</h4>
+          <p>Số lượng thiết bị IoMT tăng đột biến (ví dụ: tình huống khẩn cấp tại bệnh viện)
+          tạo ra tải không dự đoán trước.</p>
+        </div>
+      </div>
+
+      <h3>2. Hạn chế của giám sát truyền thống</h3>
+
+      <p>
+        Các phương pháp giám sát dựa trên <strong>ngưỡng tĩnh</strong> (static threshold)
+        bộc lộ nhiều hạn chế như: phản ứng chậm, thiếu linh hoạt và phụ thuộc vào con người.
+        Điều này đặt ra nhu cầu về hệ thống vận hành thông minh (AIOps) có khả năng
+        tự động điều phối tài nguyên theo thời gian thực [4].
+      </p>
+
+      <h3>3. Khoảng trống nghiên cứu</h3>
+
+      <p>Qua khảo sát các công bố khoa học gần đây (2023&ndash;2025):</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nghiên cứu</th>
+              <th>Đóng góp chính</th>
+              <th>Khoảng trống</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MLHOps</strong> &mdash; Khattak et al. [1]</td>
+              <td>Chuẩn hóa quy trình vận hành AI trong y tế</td>
+              <td>Chủ yếu quản trị mô hình chẩn đoán, thiếu các giải pháp can thiệp sâu vào hạ tầng mạng</td>
+            </tr>
+            <tr>
+              <td><strong>AI-Augmented DevSecOps</strong> &mdash; Mittal [2]</td>
+              <td>Phát hiện lỗ hổng bảo mật tự động trong pipeline DevSecOps</td>
+              <td>Thiếu cơ chế tự động <em>khắc phục</em> sự cố (chỉ dừng lại ở phát hiện)</td>
+            </tr>
+            <tr>
+              <td><strong>healthMLsec</strong> &mdash; Osama et al. [5]</td>
+              <td>Đánh giá lỗ hổng an ninh trong hệ thống y tế bằng ML</td>
+              <td>Mạnh về phát hiện lỗ hổng nhưng thiếu cơ chế tự động khắc phục; chỉ dừng ở đánh giá rủi ro</td>
+            </tr>
+            <tr>
+              <td><strong>Autonomous Agents</strong> &mdash; Tamanampudi [3]</td>
+              <td>Mô hình AI Agent tự phục hồi cho DevOps</td>
+              <td>Chưa tích hợp trong quy trình DevSecOps an toàn, chưa tuân thủ chuẩn y tế</td>
+            </tr>
+            <tr>
+              <td><strong>Medical MLOps</strong> &mdash; de Almeida et al. [4]</td>
+              <td>Framework MLOps cho AI y tế, khuyến nghị tuân thủ tiêu chuẩn lâm sàng</td>
+              <td>Khuyến nghị chung, chưa triển khai hệ thống can thiệp thời gian thực vào hạ tầng</td>
+            </tr>
+            <tr>
+              <td><strong>AI Deployment in Healthcare</strong> &mdash; Venkata [6]</td>
+              <td>Khẳng định vai trò không thể thiếu của MLOps trong triển khai AI y tế an toàn</td>
+              <td>Khuyến nghị tổng quan, chưa tích hợp với hệ thống AI Agent tự chủ can thiệp hạ tầng</td>
+            </tr>
+            <tr>
+              <td><strong>ML for QoS</strong> &mdash; Serag et al. [7]</td>
+              <td>Chứng minh hiệu quả vượt trội của ML trong phân loại lưu lượng mạng tối ưu QoS</td>
+              <td>ML truyền thống (phân loại), chưa có khả năng suy luận nguyên nhân gốc rễ hay ra quyết định xử lý phức tạp</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Gần đây, Serag et al. [7] đã chứng minh hiệu quả vượt trội của việc áp dụng
+        Machine Learning trong việc phân loại lưu lượng mạng để tối ưu hóa QoS so với các
+        phương pháp truyền thống. Đồng thời, Venkata [6] cũng khẳng định vai trò không thể
+        thiếu của MLOps trong việc đảm bảo an toàn cho các mô hình AI y tế.
+        Tuy nhiên, chưa có nghiên cứu nào kết hợp đồng thời ba yếu tố:
+        <strong>(i)</strong> AI Agent tự chủ có khả năng suy luận và can thiệp hạ tầng,
+        <strong>(ii)</strong> quy trình DevSecOps đảm bảo bảo mật,
+        <strong>(iii)</strong> quy trình MLOps giám sát độ tin cậy của AI.
+      </p>
+
+      <div class="highlight-box highlight-success">
+        <p><strong>Giải pháp đề xuất:</strong> Đồ án sẽ lấp đầy các khoảng trống trên bằng cách
+        xây dựng một nền tảng thực nghiệm tích hợp: sử dụng <strong>Agentic AIOps</strong>
+        (AI tự chủ dựa trên LLM) có khả năng không chỉ phân loại mà còn
+        <em>suy luận nguyên nhân</em> và <em>ra quyết định xử lý phức tạp</em>
+        để tự động đảm bảo QoS mạng, được quản lý chặt chẽ bởi quy trình
+        <strong>DevSecOps</strong> (để bảo mật hạ tầng) và <strong>MLOps</strong>
+        (để giám sát độ tin cậy của AI).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN III: MỤC TIÊU NGHIÊN CỨU -->
+  <section id="s3" class="section section-dark">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">III</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần III</span>
+          <h2>Mục tiêu Nghiên cứu</h2>
+        </div>
+      </div>
+
+      <h3>1. Mục tiêu cốt lõi</h3>
+      <p>
+        Duy trì <strong>độ trễ dữ liệu sinh hiệu &lt; 200ms</strong> và tỷ lệ lỗi truyền tải
+        <strong>&lt; 1%</strong> cho luồng dữ liệu y tế trong điều kiện mạng biến động
+        (tải cao, tấn công DDoS, bùng nổ kết nối).
+      </p>
+
+      <h3>2. Mục tiêu cụ thể</h3>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tầng</th>
+              <th>Mục tiêu</th>
+              <th>Công cụ/Kỹ thuật</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-blue">Hạ tầng</span></td>
+              <td>Triển khai cụm AKS với khả năng mô phỏng luồng dữ liệu hỗn hợp
+              (Critical vs. Noise Traffic) và giả lập tấn công mạng</td>
+              <td>Azure AKS, Terraform IaC, MQTT, HTTP</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-orange">Trí tuệ</span></td>
+              <td>Phát triển AI Agent (Agentic AIOps) đóng vai trò điều phối nhằm giữ
+              độ trễ &lt; 200ms thông qua:<br>
+              &bull; <strong>Autoscale:</strong> Tương tác với KEDA dựa trên ngữ cảnh QoS
+              (độ trễ, lỗi/timeout, dấu hiệu hàng đợi) thay vì chỉ dựa CPU/RAM<br>
+              &bull; <strong>Traffic Blocking/Filtering:</strong> Áp dụng NetworkPolicy lọc bỏ
+              lưu lượng bất thường, ưu tiên và bảo vệ băng thông cho dữ liệu y tế</td>
+              <td>Azure OpenAI (GPT-4o), LangChain, ReAct pattern</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-purple">Vận hành</span></td>
+              <td>Thiết lập Pipeline CI/CD tự động quét lỗ hổng bảo mật cho mã nguồn
+              và Container. Giám sát lịch sử quyết định AI, cảnh báo khi AI hoạt động sai lệch</td>
+              <td>GitHub Actions, Trivy, SonarCloud, MLflow</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN IV: KIẾN TRÚC HỆ THỐNG -->
+  <section id="s4" class="section section-light">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">IV</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần IV</span>
+          <h2>Kiến trúc Hệ thống</h2>
+        </div>
+      </div>
+
+      <h3>1. Mô hình kiến trúc Microservices 3 tầng</h3>
+
+      <p>Hệ thống được thiết kế theo mô hình Microservices trên nền tảng Kubernetes (AKS),
+      phân tách rõ ràng thành 3 tầng kiến trúc:</p>
+
+      <div class="card-grid">
+        <div class="card card-accent-green">
+          <h4 class="card-title-green">Data Plane</h4>
+          <p><strong>namespace: medical-data</strong></p>
+          <p>Xử lý luồng dữ liệu thực tế. Bao gồm: Nginx Ingress Controller (HTTP L7),
+          Mosquitto MQTT Broker (TCP LoadBalancer), target-app (FastAPI), NetworkPolicy,
+          ScaledObject CRD.</p>
+          <p><em>AI Agent KHÔNG can thiệp trực tiếp vào tầng này.</em></p>
+        </div>
+        <div class="card card-accent-orange">
+          <h4 class="card-title-orange">Intelligence Plane</h4>
+          <p><strong>namespace: aiops</strong></p>
+          <p>AI quan sát và suy luận. Bao gồm: Prometheus (PromQL), Context Builder,
+          AI Agent (LangChain ReAct + CoT), Decision Engine, MLflow Tracking,
+          Local LLM (Ollama/Phi-3 &mdash; thực nghiệm).</p>
+        </div>
+        <div class="card card-accent-blue">
+          <h4>Control &amp; Ops Plane</h4>
+          <p>Thực thi quyết định của AI. Bao gồm: K8s API Server,
+          KEDA Operator (keda-system namespace), Grafana, Alertmanager,
+          Promtail + Loki, GitHub Actions CI/CD.</p>
+          <p><em>Mọi thao tác đều đi qua K8s API Server.</em></p>
+        </div>
+      </div>
+
+      <h3>2. Sơ đồ kiến trúc tổng thể</h3>
+
+      <figure class="figure-diagram">
+        <a href="images/system-overview.png" target="_blank" rel="noopener">
+          <img
+            src="images/system-overview.png"
+            alt="Sơ đồ kiến trúc tổng thể 3 tầng: Data Plane, Intelligence Plane, Control & Ops Plane trên nền tảng Azure Kubernetes Service"
+            loading="lazy"
+            width="3200"
+            height="3872"
+          >
+        </a>
+        <figcaption>Hình 1. Sơ đồ kiến trúc Microservices 3 tầng &mdash; Data Plane, Intelligence Plane, Control &amp; Ops Plane
+          <br><small>(Click vào ảnh để xem kích thước đầy đủ)</small></figcaption>
+      </figure>
+
+      <h3>3. Luồng dữ liệu chính</h3>
+
+      <h4>Luồng dữ liệu sinh hiệu (Critical &mdash; Priority HIGH)</h4>
+      <div class="flow-row">
+        <span class="flow-box flow-box-green">MQTT Publisher<small>Heart Rate, SpO2</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-green-border">Mosquitto<small>TCP LB :1883</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-green-border">target-app<small>MQTT subscribe</small></span>
+      </div>
+
+      <h4>Luồng HTTP (Noise / DDoS)</h4>
+      <div class="flow-row">
+        <span class="flow-box flow-box-red">Noise / DDoS<small>HTTP Flood</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box">Nginx Ingress<small>L7 Proxy</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box">target-app<small>FastAPI :8000</small></span>
+      </div>
+
+      <h4>Luồng điều khiển AI Agent</h4>
+      <div class="flow-row">
+        <span class="flow-box flow-box-purple">Prometheus<small>PromQL</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-orange">Context Builder<small>Metrics &rarr; NL</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-orange">AI Agent<small>ReAct + CoT</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-accent-border">K8s API Server<small>kubectl apply</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box">NetworkPolicy<br>ScaledObject</span>
+      </div>
+
+      <div class="highlight-box highlight-warn">
+        <p><strong>Nguyên tắc thiết kế quan trọng:</strong> AI Agent chỉ can thiệp vào <em>Control Plane</em>,
+        không xử lý trực tiếp Data Plane. Mọi thao tác đều thông qua K8s API Server.
+        Ưu tiên: <strong>Block IP trước</strong> &rarr; <strong>Scale sau</strong> &rarr; <strong>Verify kết quả</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN V: PHƯƠNG PHÁP THỰC NGHIỆM -->
+  <section id="s5" class="section section-alt">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">V</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần V</span>
+          <h2>Phương pháp Thực nghiệm</h2>
+        </div>
+      </div>
+
+      <h3>1. Dữ liệu và quy trình xử lý</h3>
+
+      <ul>
+        <li><strong>Nguồn dữ liệu:</strong> Prometheus thu thập chuỗi thời gian từ AKS &mdash;
+        CPU, RAM, Latency, Error Rate, Access Logs/Ingress Metrics.</li>
+        <li><strong>Aggregation:</strong> Dữ liệu thô được lấy mẫu mỗi 5s, tổng hợp thành cửa sổ 30s
+        hoặc 1 phút để giảm nhiễu.</li>
+        <li><strong>Prompt Engineering:</strong> Chuyển đổi các chỉ số số học thành văn bản ngữ cảnh
+        để LLM hiểu. Ví dụ: <em>"Latency p99 tăng từ 50ms lên 350ms trong 30s qua,
+        CPU 85%, 500 req/s từ 3 IP lạ"</em></li>
+      </ul>
+
+      <h3>2. Chiến lược đa mô hình AI</h3>
+
+      <p>
+        Trong khi Serag et al. [7] sử dụng các mô hình ML truyền thống để phân loại lưu lượng,
+        nhóm đề xuất bước tiến mới là sử dụng LLM (Agentic AI) để không chỉ phân loại mà
+        còn <em>suy luận nguyên nhân</em> và <em>ra quyết định xử lý phức tạp hơn</em>.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Mô hình</th>
+              <th>Vai trò</th>
+              <th>Chi tiết</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-blue">Cloud LLM (Baseline)</span></td>
+              <td>Chuẩn đối sánh &mdash; độ chính xác cao nhất</td>
+              <td>Azure OpenAI GPT-4o, tính theo token</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-orange">Local LLM (Thực nghiệm)</span></td>
+              <td>So sánh trade-off: chính xác vs tốc độ vs tài nguyên</td>
+              <td>Ollama + Phi-3 / Qwen2, chạy trong cụm K8s</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. Kiến trúc AI Agent (ReAct Pattern)</h3>
+
+      <p>
+        Agent sử dụng mô hình <strong>ReAct (Reasoning + Acting)</strong> kết hợp
+        <strong>Chain-of-Thought (CoT)</strong>, thực hiện vòng lặp liên tục:
+      </p>
+
+      <div class="flow-row flow-row-center">
+        <span class="flow-box flow-box-accent">Observe<small>Metrics</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-purple">Reason<small>CoT analysis</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-orange">Plan<small>Prioritize</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-green">Act<small>Execute</small></span>
+        <span class="flow-arrow">&rarr;</span>
+        <span class="flow-box flow-box-muted">Verify<small>Re-check</small></span>
+      </div>
+
+      <figure class="figure-diagram">
+        <a href="images/ai-agent-react-flow.png" target="_blank" rel="noopener">
+          <img
+            src="images/ai-agent-react-flow.png"
+            alt="Sơ đồ vòng lặp ReAct của AI Agent: Observe, Reason, Plan, Act, Verify với các kết nối tới Prometheus, Context Builder và Kubernetes API"
+            loading="lazy"
+            width="2940"
+            height="3812"
+          >
+        </a>
+        <figcaption>Hình 2. Luồng hành động AI Agent theo mô hình ReAct (Observe &rarr; Reason &rarr; Plan &rarr; Act &rarr; Verify)
+          <br><small>(Click vào ảnh để xem kích thước đầy đủ)</small></figcaption>
+      </figure>
+
+      <p>
+        Agent phân tích tổ hợp Metrics (CPU, Latency, Error Rate, Source IP diversity)
+        để <strong>phân biệt</strong> giữa: tải cao thật (organic overload) và tấn công DDoS
+        (sudden spike, uniform pattern, many unique IPs).
+      </p>
+
+      <h3>4. Kiểm thử và đánh giá</h3>
+      <p>Áp dụng <strong>Chaos Engineering</strong>: chủ động gây nhiễu bằng giả lập DDoS và ngắt
+      đột ngột Pods để kiểm chứng khả năng tự phục hồi.</p>
+    </div>
+  </section>
+
+  <!-- PHẦN VI: CÔNG NGHỆ SỬ DỤNG -->
+  <section id="s6" class="section section-dark">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">VI</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần VI</span>
+          <h2>Công nghệ Sử dụng</h2>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tầng</th>
+              <th>Công nghệ</th>
+              <th>Vai trò</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="4"><span class="badge badge-blue">Hạ tầng</span></td>
+              <td>Azure Kubernetes Service (AKS)</td>
+              <td>Cụm Kubernetes chính trên Public Cloud</td>
+            </tr>
+            <tr>
+              <td>Terraform</td>
+              <td>Infrastructure as Code &mdash; đảm bảo tính nhất quán và tái lập</td>
+            </tr>
+            <tr>
+              <td>Mosquitto (MQTT Broker)</td>
+              <td>Nhận dữ liệu sinh hiệu qua giao thức MQTT :1883</td>
+            </tr>
+            <tr>
+              <td>Nginx Ingress Controller</td>
+              <td>L7 HTTP/HTTPS reverse proxy</td>
+            </tr>
+            <tr>
+              <td rowspan="4"><span class="badge badge-orange">Trí tuệ</span></td>
+              <td>Azure OpenAI (GPT-4o)</td>
+              <td>LLM Baseline cho suy luận AI Agent</td>
+            </tr>
+            <tr>
+              <td>Ollama + Phi-3</td>
+              <td>Local LLM thực nghiệm trong cụm K8s</td>
+            </tr>
+            <tr>
+              <td>Python + LangChain</td>
+              <td>Framework lập trình logic AI Agent (ReAct)</td>
+            </tr>
+            <tr>
+              <td>Prometheus + PromQL</td>
+              <td>Thu thập metrics chuỗi thời gian, engine truy vấn</td>
+            </tr>
+            <tr>
+              <td rowspan="6"><span class="badge badge-purple">Vận hành</span></td>
+              <td>KEDA</td>
+              <td>Event-driven Autoscaler &mdash; scale dựa trên Prometheus metrics</td>
+            </tr>
+            <tr>
+              <td>GitHub Actions</td>
+              <td>CI/CD Pipeline tự động Build, Scan, Deploy</td>
+            </tr>
+            <tr>
+              <td>Trivy + SonarCloud</td>
+              <td>Container vulnerability scanning + SAST code quality</td>
+            </tr>
+            <tr>
+              <td>MLflow</td>
+              <td>Theo dõi lịch sử quyết định AI, model registry</td>
+            </tr>
+            <tr>
+              <td>Grafana</td>
+              <td>Dashboard trực quan hóa QoS, Agent decisions, cost</td>
+            </tr>
+            <tr>
+              <td>Alertmanager + Promtail + Loki</td>
+              <td>Alert routing, log collection và aggregation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN VII: KẾ HOẠCH TRIỂN KHAI -->
+  <section id="s7" class="section section-light">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">VII</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần VII</span>
+          <h2>Kế hoạch Triển khai</h2>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item active">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="tl-title">Tháng 02 &mdash; Khởi tạo &amp; Xây dựng hạ tầng cơ sở</div>
+            <div class="tl-body">
+              &bull; Phân tích yêu cầu, chốt kiến trúc hệ thống trên Azure<br>
+              &bull; Viết Terraform khởi tạo Cluster AKS, VNet, ACR<br>
+              &bull; Code module giả lập dữ liệu (Simulator) tạo traffic MQTT và HTTP<br>
+              &bull; Deploy target-app cơ bản, Mosquitto MQTT Broker, Prometheus
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="tl-title">Tháng 03 &mdash; Phát triển lõi AI Agent</div>
+            <div class="tl-body">
+              &bull; Lập trình AI Agent: Kết nối Azure OpenAI (nhân chính) và thử nghiệm Local LLM (Ollama/Phi-3)<br>
+              &bull; Xây dựng Context Builder và logic phân tích Metrics &rarr; Reasoning<br>
+              &bull; Cấu hình KEDA, Network Policies, phân quyền RBAC trên Kubernetes<br>
+              &bull; Integration test: Agent detect anomaly &rarr; execute action &rarr; verify recovery
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="tl-title">Tháng 04 &mdash; Tích hợp Quy trình (DevSecOps &amp; MLOps)</div>
+            <div class="tl-body">
+              &bull; DevSecOps: Xây dựng Pipeline GitHub Actions, tích hợp Trivy &amp; SonarCloud<br>
+              &bull; MLOps: Cài đặt MLflow, viết code log lịch sử Agent, xây dựng Dashboard Grafana<br>
+              &bull; Cài đặt Alertmanager, Promtail + Loki cho observability stack hoàn chỉnh
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="tl-title">Tháng 05 &mdash; Thực nghiệm &amp; Báo cáo</div>
+            <div class="tl-body">
+              &bull; Triển khai kịch bản Stress Test (DDoS) và đo đạc hiệu năng<br>
+              &bull; Thu thập số liệu (Độ trễ, MTTR) và so sánh Cloud AI vs Local AI<br>
+              &bull; Security Test: giả lập commit mã nguồn chứa lỗ hổng, kiểm tra Pipeline<br>
+              &bull; Quay video Demo và hoàn thiện báo cáo
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN VIII: KẾT QUẢ KỲ VỌNG -->
+  <section id="s8" class="section section-alt">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">VIII</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần VIII</span>
+          <h2>Kết quả Kỳ vọng &amp; Tiêu chí Đánh giá</h2>
+        </div>
+      </div>
+
+      <h3>1. Chất lượng dịch vụ mạng (QoS &mdash; Mục tiêu cốt lõi)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Chỉ số</th><th>Mục tiêu</th><th>Cách đo</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Độ trễ gói tin sinh hiệu</td>
+              <td><strong>&lt; 200ms</strong> ngay cả khi CPU &gt; 80%</td>
+              <td><code>histogram_quantile(0.99, request_duration_seconds)</code></td>
+            </tr>
+            <tr>
+              <td>Tỷ lệ lỗi truyền tải</td>
+              <td><strong>&lt; 1%</strong> cho luồng dữ liệu y tế</td>
+              <td><code>rate(http_requests_total{code=~"5.."}[1m])</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2. Hiệu năng mô hình AI</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Chỉ số</th><th>Mô tả</th><th>Mục tiêu</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Độ chính xác quyết định</td>
+              <td>% Agent đưa ra quyết định đúng (phân biệt Tải cao vs DDoS)</td>
+              <td>&gt; 85%</td>
+            </tr>
+            <tr>
+              <td>Tỷ lệ ảo giác (Hallucination)</td>
+              <td>Tần suất Agent đưa ra lệnh sai cú pháp hoặc không tồn tại</td>
+              <td>&lt; 5%</td>
+            </tr>
+            <tr>
+              <td>Hiệu quả chi phí</td>
+              <td>So sánh Cloud LLM (token cost) vs Local LLM (GPU cost)</td>
+              <td>Phân tích trade-off</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. Hiệu quả vận hành</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Chỉ số</th><th>Mô tả</th><th>Mục tiêu</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MTTR (Mean Time To Recovery)</td>
+              <td>Thời gian từ sự cố đến khi hệ thống ổn định trở lại</td>
+              <td>Nhanh hơn xử lý thủ công <strong>50%</strong></td>
+            </tr>
+            <tr>
+              <td>Pipeline Security Gate</td>
+              <td>% lỗ hổng bị chặn trước khi deploy</td>
+              <td>&gt; 95% Critical/High CVE bị block</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN IX: HẠN CHẾ -->
+  <section id="s9" class="section section-dark">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">IX</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần IX</span>
+          <h2>Hạn chế của Đề tài</h2>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4 class="card-title-orange">Dữ liệu mô phỏng</h4>
+          <p>Sử dụng dữ liệu giả lập (Python scripts) thay vì thiết bị y tế thực
+          (do vấn đề bảo mật y tế và chi phí thiết bị).
+          Tuy nhiên, dữ liệu tuân thủ chuẩn giao thức MQTT và chuẩn dữ liệu HL7.</p>
+        </div>
+        <div class="card">
+          <h4 class="card-title-orange">Độ trễ API Cloud</h4>
+          <p>Azure OpenAI có độ trễ suy luận 1-2s, làm tăng nhẹ MTTD (phát hiện),
+          nhưng KHÔNG tăng latency trên Data Plane.</p>
+        </div>
+        <div class="card">
+          <h4 class="card-title-orange">Giới hạn Local LLM</h4>
+          <p>Tài nguyên Lab hạn chế, Local LLM chỉ dùng phiên bản nén
+          (Quantized/Mini) &mdash; chưa đạt hiệu năng tối ưu như Server chuyên dụng.</p>
+        </div>
+        <div class="card">
+          <h4 class="card-title-orange">Quy mô tấn công</h4>
+          <p>DDoS giả lập trong môi trường Lab cô lập (Isolated VNet) với lưu lượng
+          giới hạn, tránh vi phạm chính sách Azure.</p>
+        </div>
+        <div class="card">
+          <h4 class="card-title-orange">Chưa tích hợp trọn vẹn phần cứng</h4>
+          <p>Đề tài tập trung vào xử lý ở tầng Cloud và Mạng (Backend/Network Layer),
+          chưa bao gồm phần phát triển ứng dụng di động hay thiết bị đeo tay cho bệnh nhân.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHẦN X: TÀI LIỆU THAM KHẢO -->
+  <section id="s10" class="section section-light">
+    <div class="section-inner">
+      <div class="section-heading">
+        <div class="section-heading-num">X</div>
+        <div class="section-heading-text">
+          <span class="section-label">Phần X</span>
+          <h2>Tài liệu Tham khảo</h2>
+        </div>
+      </div>
+
+      <ol class="ref-list">
+        <li>F. K. Khattak, V. Subasri, A. Krishnan, et al., "MLHOps: Machine Learning Health
+        Operations," <em>IEEE Access</em>, vol. 13, pp. 20374&ndash;20412, 2025.</li>
+        <li>A. Mittal, "AI-Augmented DevSecOps Pipelines for Secure and Scalable Service-Oriented
+        Architectures in Cloud-Native Systems," in <em>2025 IEEE International Conference on
+        Service-Oriented System Engineering (SOSE)</em>, 2025.</li>
+        <li>V. M. Tamanampudi, "AI Agents in DevOps: Implementing Autonomous Agents for Self-Healing
+        Systems and Automated Deployment in Cloud Environments," <em>Australian Journal of Machine
+        Learning Research &amp; Applications</em>, vol. 3, no. 2, pp. 507&ndash;545, 2023.</li>
+        <li>J. G. de Almeida, C. Messiou, S. J. Withey, et al., "Medical machine learning operations:
+        a framework to facilitate clinical AI development and deployment in radiology,"
+        <em>European Radiology</em>, vol. 35, pp. 6828&ndash;6841, 2025.</li>
+        <li>O. F. Osama, N. Kshetri, M. M. Rahman, and B. P. Pokharel, "healthMLsec: Machine Learning
+        based Vulnerability Assessment in Health Systems," <em>Preprints</em>, 2025.</li>
+        <li>N. S. V. S. Venkata, "AI Model Deployment in Healthcare: MLOps Innovations and Challenges,"
+        <em>International Journal of Computer Science and Information Technology Research</em>,
+        vol. 6, no. 1, pp. 1&ndash;13, 2025.</li>
+        <li>R. H. Serag, M. S. Abdalzaher, H. A. E. A. Elsayed, and M. Sobh, "Software Defined Network
+        Traffic Classification for QoS Optimization Using Machine Learning,"
+        <em>Journal of Network and Systems Management</em>, vol. 33, no. 41, 2025.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-title">NT114 &mdash; Đồ án Chuyên ngành &mdash; HK2 2025-2026</div>
+      <div class="footer-info">
+        <span><strong>GVHD:</strong> ThS. Lê Anh Tuấn</span>
+        <span class="footer-sep">&bull;</span>
+        <span><strong>SV:</strong> Nguyễn Minh Quyền &amp; Bùi Đặng Nhật Nguyên</span>
+      </div>
+      <div class="footer-org">Khoa Mạng máy tính &amp; Truyền thông &mdash; Trường ĐH Công nghệ Thông tin, ĐHQG-HCM</div>
+    </div>
+  </footer>
+
+</body>
+</html>

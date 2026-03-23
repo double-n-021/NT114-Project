@@ -1,0 +1,16 @@
+# DevSecOps CD Pipeline — Production (Azure AKS)
+# Triggered after CI passes on main branch
+# TODO: Implement — see roadmap Bước 9-10
+
+name: CD - Deploy to AKS
+
+on:
+  workflow_run:
+    workflows: ["CI - Build, Test, Scan"]
+    types: [completed]
+    branches: [main]
+
+# TODO: Implement deployment jobs
+# - Docker Build + Push to ACR
+# - Deploy to AKS (kubectl apply)
+# - Smoke Test + Rollback

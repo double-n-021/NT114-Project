@@ -1,0 +1,29 @@
+# NetworkPolicy template — rendered by Agent tool (networkpolicy_tool.py)
+# Applied to namespace: medical-data
+# Purpose: Block traffic from suspicious source IPs identified by AI Agent
+#
+# Architecture mapping:
+#   Decision Engine → kubectl apply → K8s API Server → this NetworkPolicy
+#
+# The {{ blocked_cidrs }} placeholder is replaced at runtime by the Agent
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: agent-block-suspicious
+  namespace: medical-data
+  labels:
+    managed-by: aiops-agent
+    action-type: ddos-mitigation
+spec:
+  podSelector:
+    matchLabels:
+      app: target-app
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except: []
+        # Agent will populate 'except' with blocked CIDRs at runtime
+        # Example: ["10.0.0.5/32", "10.0.0.8/32"]
