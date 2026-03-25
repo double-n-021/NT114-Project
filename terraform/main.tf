@@ -1,75 +1,48 @@
-# ============================================================
-# Terraform Root Module — Azure Infrastructure
-# ============================================================
-# Entry point gọi 3 modules theo thứ tự dependency:
-#   1. Resource Group (tạo trước — mọi resource đều nằm trong RG)
-#   2. modules/networking → VNet + Subnet
-#   3. modules/acr        → Container Registry
-#   4. modules/aks        → AKS cluster (nhận subnet_id + acr_id từ trên)
-#
-# Usage:
-#   cd terraform/
-#   terraform init
-#   terraform plan -var-file=environments/dev/terraform.tfvars
-#   terraform apply -var-file=environments/dev/terraform.tfvars
-#   terraform destroy -var-file=environments/dev/terraform.tfvars
-# ============================================================
-
 terraform {
-  required_version = ">= 1.5.0"
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.80"
+    kind = {
+      source  = "tehcyx/kind"
+      version = "0.5.1"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.23.0"
     }
   }
 }
 
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
+# Cấu hình cụm Kind Cluster giả lập AKS
+resource "kind_cluster" "aiops_local" {
+  name           = "agentic-aiops-cluster"
+  node_image     = "kindest/node:v1.27.3"
+  wait_for_ready = true
+
+  kind_config {
+    kind        = "Cluster"
+    api_version = "kind.x-k8s.io/v1alpha4"
+
+    # Cấu hình Node chính (Control Plane)
+    node {
+      role = "control-plane"
+      
+      # Map cổng 80 từ máy bạn vào K8s để Ingress hoạt động
+      extra_port_mappings {
+        container_port = 80
+        host_port      = 8881
+      }
+      # Map cổng 1883 cho MQTT Broker
+      extra_port_mappings {
+        container_port = 31883
+        host_port      = 1883
+      }
     }
   }
 }
 
-# ============================================================
-# 1. Resource Group — container logic cho toàn bộ Azure resources
-# ============================================================
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
-# ============================================================
-# 2. Networking — VNet + Subnet (tạo trước AKS)
-# ============================================================
-module "networking" {
-  source              = "./modules/networking"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-}
-
-# ============================================================
-# 3. ACR — Container Registry (tạo trước AKS để gán quyền pull)
-# ============================================================
-module "acr" {
-  source              = "./modules/acr"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  acr_name            = var.acr_name
-}
-
-# ============================================================
-# 4. AKS — Kubernetes Cluster (phụ thuộc networking + acr)
-# ============================================================
-module "aks" {
-  source              = "./modules/aks"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  aks_name            = var.aks_name
-  node_count          = var.aks_node_count
-  vm_size             = var.aks_vm_size
-  aks_subnet_id       = module.networking.aks_subnet_id   # output từ networking
-  acr_id              = module.acr.acr_id                 # output từ acr
+# Kết nối Terraform với cụm K8s vừa tạo
+provider "kubernetes" {
+  host                   = kind_cluster.aiops_local.endpoint
+  client_certificate     = kind_cluster.aiops_local.client_certificate
+  client_key             = kind_cluster.aiops_local.client_key
+  cluster_ca_certificate = kind_cluster.aiops_local.cluster_ca_certificate
 }
