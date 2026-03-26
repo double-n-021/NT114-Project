@@ -1,0 +1,6 @@
+FROM python:3.9-slim
+WORKDIR /app
+RUN pip install --no-cache-dir requests
+COPY noise_gen.py ddos_sim.py ./
+# Mặc định sẽ chạy noise, khi muốn ddos ta sẽ override CMD trong K8s
+CMD ["python", "noise_gen.py"]

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ddos-simulator
+  namespace: medical-data
+spec:
+  replicas: 5 # Số lượng 'botnet' giả lập tấn công
+  selector:
+    matchLabels:
+      app: ddos-simulator
+  template:
+    metadata:
+      labels:
+        app: ddos-simulator
+    spec:
+      containers:
+        - name: ddos
+          image: traffic-simulator:v1
+          imagePullPolicy: Never
+          command: ["python", "ddos_sim.py"]
+          env:
+            - name: TARGET_URL
+              value: "http://target-app-service.medical-data.svc.cluster.local/collect"
