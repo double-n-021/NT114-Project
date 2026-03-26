@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: target-app-ingress
+  namespace: medical-data
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Annotation để Prometheus tự động nhận biết và thu thập metrics từ Ingress
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "10254"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: target-app-service
+            port:
+              number: 80
