@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # ============ DATA PLANE ============
 
@@ -31,14 +29,23 @@ services:
   prometheus:
     image: prom/prometheus:v2.51.0
     ports:
-      - "9090:9090"
+      - "9091:9090"
     volumes:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
       - target-app
     restart: unless-stopped
 
-  # Grafana — dashboard (optional, nice-to-have)
+  # Ollama — Local LLM (Intelligence Plane)
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+  # Grafana — dashboard
   grafana:
     image: grafana/grafana:10.4.0
     ports:
@@ -51,3 +58,4 @@ services:
 
 volumes:
   grafana_data:
+  ollama_data:
