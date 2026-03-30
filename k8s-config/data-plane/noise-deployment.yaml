@@ -14,11 +14,11 @@ spec:
         app: noise-generator # Selector tìm Pod dựa vào nhãn này
     spec:
       containers:
-      - name: noise
-        image: traffic-simulator:v1
-        imagePullPolicy: Never # Vì ta đã 'kind load' image local
-        command: ["python", "noise_gen.py"]
-        env:
-        - name: TARGET_URL
-          # Dùng DNS nội bộ của K8s để gọi App
-          value: "http://target-app-service.medical-data.svc.cluster.local/health-check"
+        - name: noise
+          image: minhquyen1325/noise-generator:latest
+          imagePullPolicy: Always
+          command: ["python", "noise_gen.py"]
+          env:
+            - name: TARGET_URL
+              # Dùng DNS nội bộ của K8s để gọi App
+              value: "http://target-app-service.medical-data.svc.cluster.local/health-check"

@@ -3,13 +3,16 @@ kind: Service
 metadata:
   name: target-app-service
   namespace: medical-data
+  labels:
+    app: target-app # Nhãn này để ServiceMonitor tìm thấy
 spec:
   selector:
     app: target-app
   ports:
-    - protocol: TCP
-      port: 80 # Cổng Ingress gọi vào
-      targetPort: 8000 # Cổng App Python đang lắng nghe
+    - name: http
+      protocol: TCP
+      port: 80 # Đổi port của Service trùng với port của App cho đồng bộ
+      targetPort: 8000
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,7 +31,12 @@ spec:
     spec:
       containers:
         - name: target-app
-          image: target-app:v1
-          imagePullPolicy: Never # QUAN TRỌNG: Để K8s lấy image từ Kind load, không pull từ internet
+          image: minhquyen1325/target-app:v4
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
+          env:
+            - name: MQTT_BROKER
+              value: "mosquitto-service.medical-data.svc.cluster.local"
+            - name: MQTT_PORT
+              value: "1883"

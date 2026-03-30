@@ -5,10 +5,9 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Cài đặt thư viện cần thiết
-RUN pip install --no-cache-dir paho-mqtt
+RUN pip install --no-cache-dir paho-mqtt requests
 
-# Copy mã nguồn vào container
-COPY mqtt_publisher.py .
+COPY . .
 
-# Chạy script
-CMD ["python", "mqtt_publisher.py"]
+# CMD mặc định (bạn có thể ghi đè lệnh này trong file k8s deployment)
+CMD ["python", "noise_gen.py"]

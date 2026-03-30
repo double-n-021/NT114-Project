@@ -1,0 +1,27 @@
+prometheus:
+  prometheusSpec:
+    scrapeInterval: "5s" # Yêu cầu 3.1
+    evaluationInterval: "5s"
+    retention: "15d" # Yêu cầu 3.1
+    # TẮT STORAGE để không bị lỗi trên Local (Dữ liệu lưu tạm trên RAM/Disk local)
+    storageSpec: {}
+    podAntiAffinity: ""
+    resources:
+      requests:
+        memory: "256Mi"
+      limits:
+        memory: "512Mi"
+
+alertmanager:
+  enabled: true
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ["alertname"]
+      receiver: "default-receiver"
+    receivers:
+      - name: "default-receiver"
+
+grafana:
+  enabled: true # Để tí nữa mình xem biểu đồ luôn

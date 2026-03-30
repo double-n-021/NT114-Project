@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: target-app-monitor
+  namespace: monitoring
+  labels:
+    # ĐÂY LÀ DÒNG QUYẾT ĐỊNH: Phải khớp với matchLabels ở trên
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      # Nhãn này phải khớp với nhãn 'app: target-app' của Service
+      app: target-app
+  namespaceSelector:
+    # Cho phép quét Service nằm ở namespace khác (medical-data)
+    matchNames:
+      - medical-data
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 5s
