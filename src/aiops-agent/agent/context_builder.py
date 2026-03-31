@@ -19,10 +19,11 @@ LATENCY_THRESHOLD = float(os.environ.get("LATENCY_THRESHOLD_MS", "200")) / 1000
 
 @dataclass
 class SystemContext:
-    """Kết quả quan sát hệ thống."""
+    """Kết quả quan sát hệ thống — 5 metrics theo đề cương."""
     request_rate: float = 0.0
     latency_p99: float = 0.0
     error_rate: float = 0.0
+    cpu_usage: float = 0.0           # CPU usage % (process-level)
     has_anomaly: bool = False
     anomaly_type: str = "normal"  # normal | high_load | ddos_suspected | high_error_rate
     prompt: str = ""
@@ -70,10 +71,16 @@ def build_context() -> SystemContext:
     )
     ctx.error_rate = err_rate if err_rate and err_rate > 0 else 0.0
 
+    # CPU usage (process-level) — theo đề cương
+    ctx.cpu_usage = _query_prometheus(
+        'rate(process_cpu_seconds_total{job="target-app"}[1m]) * 100'
+    ) or 0.0
+
     ctx.raw_metrics = {
         "request_rate": round(ctx.request_rate, 2),
         "latency_p99_ms": round(ctx.latency_p99 * 1000, 1),
         "error_rate_pct": round(ctx.error_rate * 100, 2),
+        "cpu_usage_pct": round(ctx.cpu_usage, 1),
     }
 
     # === Phát hiện anomaly ===
@@ -92,6 +99,10 @@ def build_context() -> SystemContext:
     elif ctx.error_rate > 0.01:
         ctx.has_anomaly = True
         ctx.anomaly_type = "high_error_rate"
+    # Rule 4: CPU usage quá cao (> 80%)
+    elif ctx.cpu_usage > 80:
+        ctx.has_anomaly = True
+        ctx.anomaly_type = "high_load"
 
     # === Tạo NL prompt cho LLM ===
     ctx.prompt = _build_prompt(ctx)
@@ -100,6 +111,7 @@ def build_context() -> SystemContext:
         f"Context: rate={ctx.request_rate:.1f} req/s, "
         f"p99={ctx.latency_p99*1000:.0f}ms, "
         f"err={ctx.error_rate*100:.1f}%, "
+        f"cpu={ctx.cpu_usage:.1f}%, "
         f"anomaly={ctx.anomaly_type}"
     )
     return ctx
@@ -110,12 +122,14 @@ def _build_prompt(ctx: SystemContext) -> str:
     status = "⚠️ ANOMALY DETECTED" if ctx.has_anomaly else "✅ NORMAL"
     latency_note = "→ VIOLATION" if ctx.latency_p99 > LATENCY_THRESHOLD else "→ OK"
     error_note = "→ HIGH" if ctx.error_rate > 0.01 else "→ OK"
+    cpu_note = "→ HIGH" if ctx.cpu_usage > 80 else "→ OK"
 
     return f"""Current system status (last 60s):
 - Status: {status}
 - Request rate: {ctx.request_rate:.1f} req/s
 - Latency p99: {ctx.latency_p99*1000:.0f}ms (threshold: 200ms) {latency_note}
 - Error rate: {ctx.error_rate*100:.2f}% {error_note}
+- CPU usage: {ctx.cpu_usage:.1f}% (threshold: 80%) {cpu_note}
 - Anomaly type: {ctx.anomaly_type}
 
 As the AIOps Agent, analyze these metrics and decide:
